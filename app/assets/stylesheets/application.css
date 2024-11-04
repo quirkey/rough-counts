@@ -1,0 +1,14 @@
+/* This will always insert a page break before the element */
+.page-break-before {
+  page-break-before: always;
+}
+
+/* This will always insert a page break after the element */
+.page-break-after {
+  page-break-after: always;
+}
+
+/* This will avoid a page break inside the element */
+.page-break-inside {
+  page-break-inside: avoid;
+}

@@ -1,0 +1,98 @@
+inherit_from: .rubocop_todo.yml
+
+AllCops:
+  NewCops: enable
+  SuggestExtensions: false
+  Include:
+    - Rakefile
+    - Gemfile
+    - config.ru
+    - app/**/*
+    - db/**/*
+    - test/**/*
+    - spec/**/*
+    - config/routes.rb
+    - lib/**/*
+  Exclude:
+    - app/views/**/*
+    - app/assets/**/*
+    - app/javascript/**/*
+    - app/storage/**/*
+    - bin/**/*
+    - tmp/**/*
+    - vendor/**/*
+    - test/fixtures/**/*
+    - test/screenshots/**/*
+    - "**/*.keep"
+    - coverage/**/*
+    - node_modules/**/*
+    - db/schema.rb
+    - "**/.DS_Store"
+    - spec/factories/attachments/*
+    - lib/assets/**/*
+
+Layout/HashAlignment:
+  EnforcedHashRocketStyle: table
+
+Lint/RequireParentheses:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Max: 12
+
+Metrics/PerceivedComplexity:
+  Max: 12
+
+Layout/LineLength:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/ModuleLength:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/EachWithObject:
+  Description: Prefer 'each_with_object' over 'inject' or 'reduce'.
+  Enabled: false
+
+Style/NegatedIf:
+  Enabled: false
+
+Style/RegexpLiteral:
+  AllowInnerSlashes: true
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/AsciiComments:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  EnforcedStyle: compact
+
+Naming/VariableNumber:
+  EnforcedStyle: snake_case
+  AllowedIdentifiers: google_oauth2
+
+Naming/PredicateName:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Exclude:
+    - db/migrate/**
+
+Style/HashSyntax:
+  EnforcedShorthandSyntax: either

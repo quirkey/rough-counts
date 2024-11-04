@@ -1,0 +1,48 @@
+version: "3"
+services:
+  db:
+    image: postgres:12
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=test
+      - POSTGRES_PASSWORD=test
+    volumes:
+      - db-data:/var/lib/postgresql/data
+  redis:
+    image: redis:6.2.5
+    ports:
+      - "6379:6379"
+    volumes:
+     - redis-data:/var/lib/redis
+  web: &rough-counts
+    build:
+      args:
+        CHROMEDRIVER_VERSION: "81.0.4044.20"
+      context: .
+      dockerfile: ./Dockerfile
+    image: rough-counts-rails
+    env_file: .env
+    tty: true
+    stdin_open: true
+    command: bash -c "bundle install && rm -f tmp/pids/server.pid && ./bin/dev"
+    volumes:
+      - bundler-cache:/bundle_cache
+      - .:/app:delegated
+    environment:
+      - BUNDLE_PATH=/bundle_cache
+      - PG_USERNAME=postgres
+      - PG_PASSWORD=password
+      - PG_HOST=db
+      - PORT=3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+
+volumes:
+  db-data:
+  bundler-cache:
+  redis-data:
