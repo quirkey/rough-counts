@@ -3,6 +3,8 @@
 class User < ApplicationRecord
   devise :omniauthable, omniauth_providers: [:square]
 
+  has_many :inventory_checks
+
   def self.from_omniauth(access_token)
     info = access_token.info
     user = User.find_or_initialize_by(uid: access_token.uid, provider: access_token.provider)

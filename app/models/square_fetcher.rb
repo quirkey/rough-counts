@@ -1,4 +1,8 @@
 class SquareFetcher
+  def initialize(location_id)
+    @location_id = location_id
+  end
+
   def find_item(sku)
     result = client.catalog.search_catalog_items(body: { text_filter: sku })
     if result.success?
@@ -8,15 +12,15 @@ class SquareFetcher
     end
   end
 
-  def fetch_inventory_counts(skus, location_id)
+  def fetch_inventory_counts(item_ids)
     result = client.inventory.batch_retrieve_inventory_counts(
       body: {
-        catalog_object_ids: skus,
-        location_ids: [location_id],
+        catalog_object_ids: item_ids,
+        location_ids: [@location_id],
       },
     )
     if result.success?
-      result.data.counts
+      parse_inventory(result.data.counts)
     else
       {}
     end
@@ -33,6 +37,13 @@ class SquareFetcher
       vendor: variation[:item_variation_data][:name],
       price: variation[:item_variation_data][:price_money][:amount],
     }
+  end
+
+  def parse_inventory(counts)
+    counts.collect do |count|
+      next unless count[:state] == "IN_STOCK"
+      [count[:catalog_object_id], count[:quantity]]
+    end.compact.to_h
   end
 
   def client

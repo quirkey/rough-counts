@@ -1,2 +1,7 @@
 <div class="">
+  <%= form_for @inventory_check do |f| %>
+    <%= f.label :skus, "SKUs or ISBNs" %>
+    <%= f.text_area :skus %>
+    <%= f.submit "Search" %>
+  <% end %>
 </div>
