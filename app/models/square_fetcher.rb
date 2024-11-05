@@ -35,7 +35,7 @@ class SquareFetcher
       sku: variation[:item_variation_data][:sku],
       variation_id: variation[:id],
       vendor: variation[:item_variation_data][:name],
-      price: variation[:item_variation_data][:price_money][:amount],
+      price: variation[:item_variation_data][:price_money][:amount].to_f / 100,
     }
   end
 

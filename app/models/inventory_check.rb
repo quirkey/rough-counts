@@ -1,4 +1,5 @@
 require "ostruct"
+require "csv"
 
 class InventoryCheck < ApplicationRecord
   belongs_to :user
@@ -9,6 +10,16 @@ class InventoryCheck < ApplicationRecord
 
   def skus_array
     skus.split("\n")
+  end
+
+  def to_csv
+    CSV.generate("") do |csv|
+      csv << data.first.keys
+      data.each do |item|
+        csv << item.values
+      end
+      csv
+    end
   end
 
   def inventory_items

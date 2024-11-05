@@ -18,6 +18,11 @@ class InventoryChecksController < ApplicationController
     @inventory_check = InventoryCheck.find(params[:id])
   end
 
+  def csv
+    @inventory_check = InventoryCheck.find(params[:id])
+    send_data @inventory_check.to_csv, type: "text/csv", filename: "inventory_check-#{@inventory_check.created_at.to_i}.csv"
+  end
+
   private
 
   def inventory_check_params

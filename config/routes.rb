@@ -14,7 +14,11 @@ Rails.application.routes.draw do
     get "sign_out", to: "devise/sessions#destroy", as: :destroy_user_session
   end
 
-  resources :inventory_checks
+  resources :inventory_checks do
+    member do
+      get :csv
+    end
+  end
 
   root "home#index"
 end
