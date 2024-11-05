@@ -14,20 +14,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_08_215421) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "sheets", force: :cascade do |t|
-    t.string "key"
-    t.string "worksheet_title"
-    t.string "name"
-    t.binary "data"
-    t.datetime "last_modified_at"
-    t.datetime "last_fetched_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "users", force: :cascade do |t|
-    t.string "email", default: "", null: false
-    t.string "encrypted_password"
     t.string "name"
     t.string "provider"
     t.string "uid"
@@ -36,7 +23,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_08_215421) do
     t.datetime "refresh_token_expires_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["provider", "uid"], name: "index_users_on_provider_and_uid", unique: true
   end
 

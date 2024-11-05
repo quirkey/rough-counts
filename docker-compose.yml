@@ -1,6 +1,5 @@
-version: "3"
 services:
-  db:
+  rcdb:
     image: postgres:12
     ports:
       - 5432:5432
@@ -35,12 +34,13 @@ services:
       - BUNDLE_PATH=/bundle_cache
       - PG_USERNAME=postgres
       - PG_PASSWORD=password
-      - PG_HOST=db
+      - PG_HOST=rcdb
+      - PG_PORT=5432
       - PORT=3000
     ports:
-      - "3000:3000"
+      - "3010:3000"
     depends_on:
-      - db
+      - rcdb
 
 volumes:
   db-data:

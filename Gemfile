@@ -47,5 +47,5 @@ gem "rubocop", "~> 1.63"
 gem "tailwindcss-rails", "~> 2.5"
 
 gem "devise", "~> 4.9"
-gem "omniauth-google-oauth2"
+gem "omniauth-square", git: "https://github.com/dja/omniauth-square.git"
 gem "omniauth-rails_csrf_protection"
