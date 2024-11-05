@@ -1,4 +1,5 @@
 <div class="w-full">
+  <h2 class="text-2xl font-semibold">Create Inventory Check</h2>
   <%= form_for @inventory_check, class: "max-w-sm mx-auto" do |f| %>
     <div class="mb-5">
       <%= f.label :skus, "SKUs or ISBNs", class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
@@ -8,4 +9,37 @@
       <%= f.submit "Search", class: "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" %>
     </div>
   <% end %>
+  <h2 class="text-2xl font-semibold">Recent Inventory Checks</h2>
+  <table class="table-auto w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <tr>
+        <th scope="col" class="text-left px-6 py-3">
+          Created At
+        </th>
+        <th scope="col" class="px-6 py-3">
+          # of Items
+        </th>
+        <th scope="col" class="px-6 py-3">
+          SKUs
+        </th>
+        <th scope="col" class="px-6 py-3">
+          Download
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @inventory_checks.each do |check| %>
+        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+          <td class="px-6 py-4 text-left"><%= link_to check.created_at, inventory_check_path(check.id), class: "text-blue-500" %></td>
+          <td class="px-6 py=4"><%= check.data&.count %></td>
+          <td class="px-6 py-4"><%= check.skus_array.first(3).join(", ")%> ...</td>
+          <td class="px-6 py-4">
+            <%= link_to csv_inventory_check_path(check), class: 'text-blue' do %>
+              <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Download CSV</button>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 </div>

@@ -3,6 +3,7 @@ require "csv"
 
 class InventoryCheck < ApplicationRecord
   belongs_to :user
+  validates :skus, presence: true
 
   def skus=(value)
     super(value.split("\n").map(&:strip).reject(&:empty?).uniq.join("\n"))

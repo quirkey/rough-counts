@@ -3,15 +3,20 @@ class InventoryChecksController < ApplicationController
 
   def index
     @inventory_check = InventoryCheck.new
+    @inventory_checks = InventoryCheck.order(created_at: :desc).limit(15)
   end
 
   def create
     @inventory_check = current_user.inventory_checks.build(inventory_check_params)
     if @inventory_check.save
+      @inventory_check.fetch_data!
       redirect_to inventory_check_path(@inventory_check)
     else
       render :index
     end
+  rescue => e
+    flash[:error] = "There was a problem fetching data: #{e.message}"
+    redirect_to inventory_checks_path
   end
 
   def show
