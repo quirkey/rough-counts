@@ -14,15 +14,7 @@ Rails.application.routes.draw do
     get "sign_out", to: "devise/sessions#destroy", as: :destroy_user_session
   end
 
-  resources :sheets, only: %i[index show] do
-    collection do
-      post :fetch
-    end
-    member do
-      get :print
-      get :preview
-    end
-  end
+  resources :inventory_checks, only: %i[index]
 
   root "home#index"
 end

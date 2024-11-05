@@ -7,6 +7,7 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.1]
       t.string :provider
       t.string :uid
       t.string :access_token
+      t.string :location_id
       t.string :refresh_token
       t.datetime :refresh_token_expires_at
       t.timestamps null: false

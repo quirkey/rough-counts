@@ -10,6 +10,7 @@ class User < ApplicationRecord
       name: info["name"],
       provider: access_token.provider,
       uid: access_token.uid,
+      location_id: access_token.extra["raw_info"]["merchant"][0]["main_location_id"],
       access_token: access_token.credentials.token,
       refresh_token: access_token.credentials.refresh_token,
       refresh_token_expires_at: Time.at(access_token.credentials.expires_at),
