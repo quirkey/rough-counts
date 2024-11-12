@@ -316,4 +316,8 @@ Devise.setup do |config|
     scope: "INVENTORY_READ,INVENTORY_WRITE,ITEMS_READ,ITEMS_WRITE,ORDERS_READ,ORDERS_WRITE,MERCHANT_PROFILE_READ",
     redirect_uri: full_host + "/users/auth/square/callback",
   }
+  config.omniauth :google_oauth2, ENV["GOOGLE_CLIENT_ID"], ENV["GOOGLE_CLIENT_SECRET"], {
+                    scope: "email, profile, https://www.googleapis.com/auth/drive, https://spreadsheets.google.com/feeds",
+                    redirect_uri: full_host + "/users/auth/google_oauth2/callback",
+                  }
 end

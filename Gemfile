@@ -48,6 +48,7 @@ gem "tailwindcss-rails", "~> 2.5"
 
 gem "devise", "~> 4.9"
 gem "omniauth-square", git: "https://github.com/dja/omniauth-square.git"
+gem "omniauth-google-oauth2"
 gem "omniauth-rails_csrf_protection"
 gem "square.rb", "~> 39"
 gem "csv"

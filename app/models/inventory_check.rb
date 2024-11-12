@@ -42,6 +42,6 @@ class InventoryCheck < ApplicationRecord
   private
 
   def fetcher
-    @fetcher ||= SquareFetcher.new(user.location_id)
+    @fetcher ||= SquareFetcher.new(ENV["LOCATION_ID"])
   end
 end
