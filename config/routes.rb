@@ -20,5 +20,8 @@ Rails.application.routes.draw do
     end
   end
 
+  get "ingram" => "ingram_parser#index"
+  post "ingram/upload" => "ingram_parser#upload"
+
   root "home#index"
 end

@@ -2,6 +2,10 @@
 
 class HomeController < ApplicationController
   def index
-    redirect_to inventory_checks_path if user_signed_in?
+    if user_signed_in?
+      redirect_to inventory_checks_path
+    else
+      redirect_to controller: "sessions", action: "new"
+    end
   end
 end
