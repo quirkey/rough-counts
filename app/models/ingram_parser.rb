@@ -50,8 +50,8 @@ class IngramParser
     items = []
     csv = CSV.parse(file_data, headers: true)
     csv.each do |row|
-      new_book = row["Notes"] =~ /NEW/
-      req_book = row["Notes"] =~ /REQ/
+      new_book = row["Notes"] =~ /^NEW/
+      req_book = row["Notes"] =~ /^REQ/
       next unless new_book || req_book
 
       item = SQUARE_TEMPLATE.dup
