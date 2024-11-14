@@ -31,7 +31,9 @@ class InventoryCheck < ApplicationRecord
     return [] if skus.blank?
     items = skus_array.collect { |sku| fetcher.find_item(sku) }.compact
     item_ids = items.collect { |item| item[:variation_id] || item[:id] }
+    logger.debug "Item IDs: #{item_ids.length}"
     inventory_counts = fetcher.fetch_inventory_counts(item_ids)
+    logger.debug "Counts: #{inventory_counts.length}"
     items.each do |item|
       item[:quantity] = inventory_counts[item[:variation_id] || item[:id]] || 0
     end

@@ -1,11 +1,14 @@
 class SquareFetcher
+  attr_reader :location_id
+
   def initialize(location_id)
     @location_id = location_id
   end
 
   def find_item(sku)
+    logger.debug "Searching for item with SKU: #{sku}"
     result = client.catalog.search_catalog_items(body: { text_filter: sku })
-    if result.success?
+    if result.success? && result.data && result.data.items
       parse_item(result.data.items.first)
     else
       nil
@@ -13,17 +16,25 @@ class SquareFetcher
   end
 
   def fetch_inventory_counts(item_ids)
-    result = client.inventory.batch_retrieve_inventory_counts(
-      body: {
-        catalog_object_ids: item_ids,
-        location_ids: [@location_id],
-      },
-    )
-    if result.success?
-      parse_inventory(result.data.counts)
+    inventory_counts = {}
+    if item_ids.length > 50
+      item_ids.in_groups_of(50, false) do |slice|
+        inventory_counts.merge!(fetch_inventory_counts(slice))
+      end
     else
-      {}
+      result = client.inventory.batch_retrieve_inventory_counts(
+        body: {
+          catalog_object_ids: item_ids,
+          location_ids: [@location_id],
+        },
+      )
+      if result.success?
+        inventory_counts = parse_inventory(result.data.counts)
+      else
+        {}
+      end
     end
+    inventory_counts
   end
 
   def parse_item(item)
@@ -53,5 +64,9 @@ class SquareFetcher
       ),
       environment: "production",
     )
+  end
+
+  def logger
+    Rails.logger
   end
 end
