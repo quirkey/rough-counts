@@ -1,11 +1,11 @@
 require "csv"
 
-class IngramParser
+class PublisherParser
   SQUARE_TEMPLATE = {
     "Reference Handle" => nil,
     "Token" => nil,
     "Item Name" => nil,
-    "Variation Name" => "Ingram",
+    "Variation Name" => "Publisher",
     "Unit and Precision" => nil,
     "SKU" => nil,
     "Description" => nil,
@@ -29,7 +29,7 @@ class IngramParser
     "Stockable" => "Y",
     "Skip Detail Screen in POS" => "N",
     "Default Unit Cost" => nil,
-    "Default Vendor Name" => "Ingram",
+    "Default Vendor Name" => "Publisher",
     "Default Vendor Code" => "ING",
     "Current Quantity Rough Draft Bar & Books" => nil,
     "New Quantity Rough Draft Bar & Books" => nil,
