@@ -20,8 +20,8 @@ Rails.application.routes.draw do
     end
   end
 
-  get "publisher" => "publisher_parser#index"
-  post "publisher/upload" => "publisher_parser#upload"
+  get "publishers" => "publisher_parser#index"
+  post "publishers/upload" => "publisher_parser#upload"
 
   root "home#index"
 end

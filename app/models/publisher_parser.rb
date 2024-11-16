@@ -1,6 +1,15 @@
 require "csv"
 
 class PublisherParser
+  PUBLISHER_TYPES = [
+    ["Ingram", "ingram"],
+    ["Penguin", "PRH"],
+    ["Macmillan", "MPS"],
+    ["Norton", "WWN"],
+    ["Simon", "SS"],
+    ["IPS", "IPS"],
+    ["Hachette", "HBG"],
+  ]
   SQUARE_TEMPLATE = {
     "Reference Handle" => nil,
     "Token" => nil,
@@ -40,31 +49,52 @@ class PublisherParser
     "Tax - Sales Tax Included (8%)" => "N",
   }
 
-  attr_reader :file_data
+  attr_reader :file_data, :publisher_type
 
-  def initialize(file_data)
+  def initialize(file_data, publisher_type)
     @file_data = file_data
+    @publisher_type = publisher_type
   end
 
-  def parse
-    items = []
-    csv = CSV.parse(file_data, headers: true)
-    csv.each do |row|
+  def parse_ingram
+    @items = parse_rows do |item, row|
       new_book = row["Notes"] =~ /^NEW/
       req_book = row["Notes"] =~ /^REQ/
       next unless new_book || req_book
 
-      item = SQUARE_TEMPLATE.dup
       title = row["Product Name"]
       title = "REQ - #{title}" if req_book
       item["Item Name"] = "#{title} - #{row["Contributor"]} - #{row["Format"]} - #{row["Supplier"]}"
+      item["Variation Name"] = row["Supplier"]
       item["SKU"] = row["EAN"]
       item["Description"] = "#{row["Pub Date"]} - #{row["BISAC Category"]}"
       item["Reporting Category"] = "Book Requests" if req_book
-      item["Price"] = row["Retail Price"]
-      items << item
+      item["Price"] = row["US SRP"]
+      item
     end
-    @items = items
+  end
+
+  def parse_edws
+    @items = parse_rows do |item, row|
+      title = row["Title:Subtitle"]
+      publisher_name = PUBLISHER_TYPES.find { |_, code| code == publisher_type }&.first
+      item["Item Name"] = "#{title} - #{row["Author"]} - #{row["Format Description"]} - #{row["Publisher Name"]}"
+      item["Variation Name"] = publisher_name
+      item["Default Vendor Name"] = publisher_name
+      item["Default Vendor Code"] = publisher_type
+      item["SKU"] = row["EAN"]
+      item["Description"] = "#{row["PubDate"]} - #{row["BISAC Category Description"]}"
+      item["Price"] = row["List Price"]
+      item
+    end
+  end
+
+  def parse
+    if publisher_type == "ingram"
+      parse_ingram
+    else
+      parse_edws
+    end
   end
 
   def to_csv
@@ -75,5 +105,19 @@ class PublisherParser
         csv << item.values
       end
     end
+  end
+
+  private
+
+  def parse_rows
+    items = []
+
+    csv = CSV.parse(file_data, headers: true)
+    csv.each do |row|
+      item = SQUARE_TEMPLATE.dup
+      i = yield(item, row)
+      items << i if i
+    end
+    items
   end
 end
